@@ -56,12 +56,11 @@ func (c Cell) Digit() uint {
 // Digits iterate the possible (pencilmarked) digits in a cell.
 func (c Cell) Digits() iter.Seq[uint] {
 	return func(yield func(uint) bool) {
-		for i := range Size {
-			if c&(1<<i) != 0 {
-				if !yield(uint(i) + 1) {
-					return
-				}
+		for c != 0 {
+			if !yield(c.Digit()) {
+				return
 			}
+			c ^= c & -c // flip lowest 1 bit
 		}
 	}
 }
